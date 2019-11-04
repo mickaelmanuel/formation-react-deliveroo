@@ -1,51 +1,49 @@
 import React from "react";
 import CartLine from "./CartLine";
-import { produce } from "immer";
+import { incrementItem, decrementItem, removeItem } from "../action";
 import { formatToEuroCurrency } from "../Utils";
+import { selectPanier } from "./../selectors";
+import { connect } from "react-redux";
+
+const mapStateToProps = state => ({
+  panier: selectPanier(state)
+});
+
+const mapDispatchToProps = {
+  incrementItem,
+  decrementItem,
+  removeItem
+};
 
 const FRAIS_LIVRAISON = 2.5;
 
-const Cart = ({ statePanier, updateStatePanier, subtotal, total }) => {
-  const panierVide = statePanier == null || statePanier.length === 0;
-
+const CartRender = ({ panier, incrementItem, decrementItem, removeItem }) => {
+  const panierVide = panier == null || panier.length === 0;
+  const subtotal = panier.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
+  const total = subtotal + FRAIS_LIVRAISON;
   return (
     <div className="Cart--card">
       <button className={"Cart--validate " + (panierVide ? "Cart--disabled" : "")}>Valider mon panier</button>
 
       {(() => {
         if (panierVide) {
-          return <div class="Cart--empty">Votre panier est vide</div>;
+          return <div className="Cart--empty">Votre panier est vide</div>;
         }
 
         return (
           <div>
             <div className="Cart--items">
-              {statePanier.map((item, index) => {
+              {panier.map((item, index) => {
                 return (
                   <CartLine
                     key={index}
                     onDecrement={() => {
-                      let index = statePanier.findIndex(x => x.id === item.id);
-
-                      const nextState = produce(statePanier, draftState => {
-                        if (draftState[index].nb === 1) {
-                          draftState.splice(index, 1);
-                        } else {
-                          draftState[index].nb = statePanier[index].nb - 1;
-                        }
-                      });
-
-                      updateStatePanier(nextState);
+                      let result = panier.find(x => x.id === item.id);
+                      result.nb > 1 ? decrementItem(item.id) : removeItem(item.id);
                     }}
                     nb={item.nb}
                     onIncrement={() => {
-                      let index = statePanier.findIndex(x => x.id === item.id);
-
-                      const nextState = produce(statePanier, draftState => {
-                        draftState[index].nb = statePanier[index].nb + 1;
-                      });
-
-                      updateStatePanier(nextState);
+                      incrementItem(item.id);
                     }}
                     title={item.title}
                     price={item.price}
@@ -74,4 +72,7 @@ const Cart = ({ statePanier, updateStatePanier, subtotal, total }) => {
   );
 };
 
-export default Cart;
+export const Cart = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CartRender);

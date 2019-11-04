@@ -3,17 +3,23 @@ import axios from "axios";
 import Header from "./components/Header";
 import { Menu } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
-import produce from "immer";
-import Cart from "./components/Cart";
+import { Cart } from "./components/Cart";
+import { selectPanier } from "./selectors";
+import { connect } from "react-redux";
+import { incrementItem, addItem } from "./action";
 
-const FRAIS_LIVRAISON = 2.5;
+const mapStateToProps = state => ({
+  panier: selectPanier(state)
+});
 
-const initProduit = { id: "", title: "", nb: 1, price: 0.0 };
+const mapDispatchToProps = {
+  addItem,
+  incrementItem
+};
 
-class App extends React.Component {
+class AppRender extends React.Component {
   state = {
-    data: null,
-    panier: []
+    data: null
   };
 
   async componentDidMount() {
@@ -26,9 +32,6 @@ class App extends React.Component {
   }
 
   render() {
-    const subtotal = this.state.panier.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
-    const total = subtotal + FRAIS_LIVRAISON;
-
     return (
       <div>
         <Header restaurant={this.state.data && this.state.data.restaurant} />
@@ -51,20 +54,13 @@ class App extends React.Component {
                               popular={item.popular}
                               picture={item.picture}
                               onClick={() => {
-                                let index = this.state.panier.findIndex(x => x.id === item.id);
-                                const nextState = produce(this.state.panier, draftState => {
-                                  if (index !== -1) {
-                                    draftState[index].nb = this.state.panier[index].nb + 1;
-                                  } else {
-                                    let clone = { ...initProduit };
-                                    clone.id = item.id;
-                                    clone.title = item.title;
-                                    clone.price = item.price;
-                                    draftState.push(clone);
-                                  }
-                                });
+                                let index = this.props.panier.findIndex(x => x.id === item.id);
 
-                                this.setState({ panier: nextState });
+                                if (index !== -1) {
+                                  this.props.incrementItem(item.id);
+                                } else {
+                                  this.props.addItem({ id: item.id, title: item.title, price: item.price });
+                                }
                               }}
                             />
                           );
@@ -75,14 +71,7 @@ class App extends React.Component {
                 })}
             </div>
             <div className="Cart">
-              <Cart
-                statePanier={this.state.panier}
-                updateStatePanier={obj => {
-                  this.setState({ panier: obj });
-                }}
-                subtotal={subtotal}
-                total={total}
-              />
+              <Cart />
             </div>
           </div>
         </div>
@@ -91,4 +80,7 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export const App = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppRender);
