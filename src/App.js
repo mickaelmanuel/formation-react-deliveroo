@@ -3,9 +3,8 @@ import axios from "axios";
 import Header from "./components/Header";
 import { Menu } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
-import { formatToEuroCurrency } from "./Utils";
 import produce from "immer";
-import CartLine from "./components/CartLine";
+import Cart from "./components/Cart";
 
 const FRAIS_LIVRAISON = 2.5;
 
@@ -76,60 +75,14 @@ class App extends React.Component {
                 })}
             </div>
             <div className="Cart">
-              <div className="Cart--card">
-                <button className="Cart--validate">Valider mon panier</button>
-                <div>
-                  <div className="Cart--items">
-                    {this.state.panier &&
-                      this.state.panier.map((item, index) => {
-                        return (
-                          <CartLine
-                            key={index}
-                            onDecrement={() => {
-                              let index = this.state.panier.findIndex(x => x.id === item.id);
-
-                              const nextState = produce(this.state.panier, draftState => {
-                                if (draftState[index].nb === 1) {
-                                  draftState.splice(index, 1);
-                                } else {
-                                  draftState[index].nb = this.state.panier[index].nb - 1;
-                                }
-                              });
-
-                              this.setState({ panier: nextState });
-                            }}
-                            nb={item.nb}
-                            onIncrement={() => {
-                              let index = this.state.panier.findIndex(x => x.id === item.id);
-
-                              const nextState = produce(this.state.panier, draftState => {
-                                draftState[index].nb = this.state.panier[index].nb + 1;
-                              });
-
-                              this.setState({ panier: nextState });
-                            }}
-                            title={item.title}
-                            price={item.price}
-                          />
-                        );
-                      })}
-                  </div>
-                  <div className="Cart--results">
-                    <div className="Cart--result-line">
-                      <span className="Cart--result-name">Sous-total</span>
-                      <span className="Cart--amount">{formatToEuroCurrency(subtotal)}</span>
-                    </div>
-                    <div className="Cart--result-line">
-                      <span className="Cart--result-name">Frais de livraison</span>
-                      <span>{formatToEuroCurrency(FRAIS_LIVRAISON)}</span>
-                    </div>
-                  </div>
-                  <div className="Cart--total">
-                    <span className="Cart--result-name">Total</span>
-                    <span className="Cart--amount">{formatToEuroCurrency(total)}</span>
-                  </div>
-                </div>
-              </div>
+              <Cart
+                statePanier={this.state.panier}
+                updateStatePanier={obj => {
+                  this.setState({ panier: obj });
+                }}
+                subtotal={subtotal}
+                total={total}
+              />
             </div>
           </div>
         </div>
