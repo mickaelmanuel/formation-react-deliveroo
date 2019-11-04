@@ -9,12 +9,12 @@ import CartLine from "./components/CartLine";
 
 const FRAIS_LIVRAISON = 2.5;
 
-const initProduit = { id: "1519055545-88", title: "Brunch authentique 1 personne", nb: 1, price: 25.0 };
+const initProduit = { id: "", title: "", nb: 1, price: 0.0 };
 
 class App extends React.Component {
   state = {
     data: null,
-    panier: [initProduit]
+    panier: []
   };
 
   async componentDidMount() {
@@ -84,6 +84,7 @@ class App extends React.Component {
                       this.state.panier.map((item, index) => {
                         return (
                           <CartLine
+                            key={index}
                             onDecrement={() => {
                               let index = this.state.panier.findIndex(x => x.id === item.id);
 
@@ -112,31 +113,6 @@ class App extends React.Component {
                           />
                         );
                       })}
-
-                    {/* <div className="Cart--line">
-                      <div className="Cart--counter">
-                        <span onClick={() => {}}>
-                          <IconMoins />
-                        </span>
-                        <span>{this.state.panier[0].nb}</span>
-                        <span
-                          onClick={() => {
-                            let id = "1519055545-88";
-                            let index = this.state.panier.findIndex(x => x.id === id);
-
-                            const nextState = produce(this.state.panier, draftState => {
-                              draftState[index].nb = this.state.panier[index].nb + 1;
-                            });
-
-                            this.setState({ panier: nextState });
-                          }}
-                        >
-                          <IconPlus />
-                        </span>
-                      </div>
-                      <span className="Cart--item-name">{this.state.panier[0].title}</span>
-                      <span className="Cart--amount">{formatToEuroCurrency(this.state.panier[0].price)}</span>
-                    </div> */}
                   </div>
                   <div className="Cart--results">
                     <div className="Cart--result-line">
