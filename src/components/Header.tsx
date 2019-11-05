@@ -1,12 +1,7 @@
 import React from "react";
 import { isNull } from "util";
 import { IconDeliveroo } from "./Icon";
-
-export interface Restaurant {
-  name: string;
-  description: string;
-  picture: string;
-}
+import { Restaurant } from "../Interfaces";
 
 export interface Props {
   restaurant: Restaurant;

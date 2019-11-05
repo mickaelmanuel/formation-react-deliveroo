@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
+import { PanierLight } from "../Interfaces";
 
 export const INCREMENT_ITEM = "INCREMENT_ITEM";
 export const DECREMENT_ITEM = "DECREMENT_ITEM";
@@ -8,16 +9,6 @@ export const ADD_ITEM = "ADD_ITEM";
 export const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 export const FETCH_DATA_LOADING = "FETCH_DATA_LOADING";
 export const FETCH_DATA_ERROR = "FETCH_DATA_ERROR";
-
-export interface PanierLight {
-  id: string;
-  title: string;
-  price: number;
-}
-
-export interface Panier extends PanierLight {
-  nb: number;
-}
 
 export const incrementItem = (id: string) => {
   return {

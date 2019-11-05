@@ -1,10 +1,11 @@
-import { INCREMENT_ITEM, DECREMENT_ITEM, REMOVE_ITEM, ADD_ITEM } from "./../../action";
+import { INCREMENT_ITEM, DECREMENT_ITEM, REMOVE_ITEM, ADD_ITEM } from "../../action";
 import { produce } from "immer";
-export const initialState = [];
+import { Panier } from "../../Interfaces";
+export const initialState: Array<Panier> = [];
 
-const initProduit = { id: "", title: "", nb: 1, price: 0.0 };
+const initProduit: Panier = { id: "", title: "", nb: 1, price: 0.0 };
 
-export const panierReducer = (state = initialState, action) => {
+export const panierReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case INCREMENT_ITEM:
       let index = state.findIndex(x => x.id === action.payload);

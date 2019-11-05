@@ -1,10 +1,10 @@
 import * as React from "react";
-
 import CartLine from "./CartLine";
-import { incrementItem, decrementItem, removeItem, Panier } from "../action";
+import { incrementItem, decrementItem, removeItem } from "../action";
 import { formatToEuroCurrency } from "../Utils";
 import { selectPanier } from "./../selectors";
 import { connect } from "react-redux";
+import { Panier } from "../Interfaces";
 
 const mapStateToProps = (state: any) => ({
   panier: selectPanier(state)
@@ -20,9 +20,9 @@ const FRAIS_LIVRAISON: number = 2.5;
 
 export interface Props {
   panier: Array<Panier>;
-  incrementItem: any;
-  decrementItem: any;
-  removeItem: any;
+  incrementItem: (id: string) => void;
+  decrementItem: (id: string) => void;
+  removeItem: (id: string) => void;
 }
 
 const CartRender: React.FC<Props> = ({ panier, incrementItem, decrementItem, removeItem }) => {

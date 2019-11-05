@@ -1,11 +1,12 @@
 import React from "react";
 import Header from "./components/Header";
-import { Menu } from "./components/Menu";
+import { Menu as MenuComponent } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
 import { Cart } from "./components/Cart";
 import { selectPanier, selectData } from "./selectors";
-import { incrementItem, addItem, fetchMyData, Panier, PanierLight } from "./action";
+import { incrementItem, addItem, fetchMyData } from "./action";
 import { connect } from "react-redux";
+import { PanierLight, Panier, Menu } from "./Interfaces";
 
 const mapStateToProps = (state: any) => ({
   panier: selectPanier(state),
@@ -37,15 +38,6 @@ export interface AppProps {
 //   price: number;
 // }
 
-export interface Menu {
-  id: string;
-  title: string;
-  description: string;
-  price: string;
-  picture: string;
-  popular?: boolean;
-}
-
 class AppRender extends React.Component<AppProps> {
   componentDidMount() {
     this.props.fetchMyData();
@@ -71,7 +63,7 @@ class AppRender extends React.Component<AppProps> {
                 Object.keys(this.props.data.menu).map((menuName, index) => {
                   return (
                     this.props.data.menu[menuName].length > 0 && (
-                      <Menu title={menuName} key={index}>
+                      <MenuComponent title={menuName} key={index}>
                         {this.props.data.menu[menuName].map((item: Menu) => {
                           return (
                             <MenuItem
@@ -98,7 +90,7 @@ class AppRender extends React.Component<AppProps> {
                             />
                           );
                         })}
-                      </Menu>
+                      </MenuComponent>
                     )
                   );
                 })}
