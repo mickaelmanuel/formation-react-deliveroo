@@ -4,10 +4,10 @@ import { Menu } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
 import { Cart } from "./components/Cart";
 import { selectPanier, selectData } from "./selectors";
+import { incrementItem, addItem, fetchMyData, Panier, PanierLight } from "./action";
 import { connect } from "react-redux";
-import { incrementItem, addItem, fetchMyData } from "./action";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: any) => ({
   panier: selectPanier(state),
   data: selectData(state),
   dataHasError: state.dataHasError,
@@ -20,7 +20,33 @@ const mapDispatchToProps = {
   fetchMyData
 };
 
-class AppRender extends React.Component {
+export interface AppProps {
+  panier: Array<Panier>;
+  data: any;
+  dataHasError: boolean;
+  dataIsLoading: boolean;
+  addItem: (item: PanierLight) => void;
+  incrementItem: (id: string) => void;
+  fetchMyData: () => void;
+}
+
+// export interface Panier {
+//   id: string;
+//   title: string;
+//   nb?: number;
+//   price: number;
+// }
+
+export interface Menu {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  picture: string;
+  popular?: boolean;
+}
+
+class AppRender extends React.Component<AppProps> {
   componentDidMount() {
     this.props.fetchMyData();
   }
@@ -46,7 +72,7 @@ class AppRender extends React.Component {
                   return (
                     this.props.data.menu[menuName].length > 0 && (
                       <Menu title={menuName} key={index}>
-                        {this.props.data.menu[menuName].map(item => {
+                        {this.props.data.menu[menuName].map((item: Menu) => {
                           return (
                             <MenuItem
                               key={item.id}
@@ -61,7 +87,12 @@ class AppRender extends React.Component {
                                 if (index !== -1) {
                                   this.props.incrementItem(item.id);
                                 } else {
-                                  this.props.addItem({ id: item.id, title: item.title, price: item.price });
+                                  let x: PanierLight = {
+                                    id: item.id,
+                                    title: item.title,
+                                    price: parseFloat(item.price)
+                                  };
+                                  this.props.addItem(x);
                                 }
                               }}
                             />

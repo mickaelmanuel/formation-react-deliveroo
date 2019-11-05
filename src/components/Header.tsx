@@ -1,8 +1,18 @@
 import React from "react";
+import { isNull } from "util";
 import { IconDeliveroo } from "./Icon";
-import { isNull } from "../Utils";
 
-const Header = ({ restaurant }) => {
+export interface Restaurant {
+  name: string;
+  description: string;
+  picture: string;
+}
+
+export interface Props {
+  restaurant: Restaurant;
+}
+
+const Header: React.FC<Props> = ({ restaurant }) => {
   return (
     <header className="Header">
       <div className="TopBar">

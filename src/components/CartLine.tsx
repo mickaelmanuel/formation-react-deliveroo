@@ -1,8 +1,16 @@
-import React from "react";
-import { IconPlus, IconMoins } from "./Icon";
+import * as React from "react";
+import { IconMoins, IconPlus } from "./Icon";
 import { formatToEuroCurrency } from "../Utils";
 
-const CartLine = ({ onDecrement, nb, onIncrement, title, price }) => {
+export interface Props {
+  nb: number;
+  title: string;
+  price: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+}
+
+const CartLine: React.FC<Props> = ({ onDecrement, nb, onIncrement, title, price }) => {
   return (
     <div className="Cart--line">
       <div className="Cart--counter">

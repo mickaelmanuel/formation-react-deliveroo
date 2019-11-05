@@ -1,11 +1,12 @@
-import React from "react";
+import * as React from "react";
+
 import CartLine from "./CartLine";
-import { incrementItem, decrementItem, removeItem } from "../action";
+import { incrementItem, decrementItem, removeItem, Panier } from "../action";
 import { formatToEuroCurrency } from "../Utils";
 import { selectPanier } from "./../selectors";
 import { connect } from "react-redux";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: any) => ({
   panier: selectPanier(state)
 });
 
@@ -15,9 +16,16 @@ const mapDispatchToProps = {
   removeItem
 };
 
-const FRAIS_LIVRAISON = 2.5;
+const FRAIS_LIVRAISON: number = 2.5;
 
-const CartRender = ({ panier, incrementItem, decrementItem, removeItem }) => {
+export interface Props {
+  panier: Array<Panier>;
+  incrementItem: any;
+  decrementItem: any;
+  removeItem: any;
+}
+
+const CartRender: React.FC<Props> = ({ panier, incrementItem, decrementItem, removeItem }) => {
   const panierVide = panier == null || panier.length === 0;
   const subtotal = panier.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
   const total = subtotal + FRAIS_LIVRAISON;
@@ -33,13 +41,13 @@ const CartRender = ({ panier, incrementItem, decrementItem, removeItem }) => {
         return (
           <div>
             <div className="Cart--items">
-              {panier.map((item, index) => {
+              {panier.map((item, index: number) => {
                 return (
                   <CartLine
                     key={index}
                     onDecrement={() => {
                       let result = panier.find(x => x.id === item.id);
-                      result.nb > 1 ? decrementItem(item.id) : removeItem(item.id);
+                      result && result.nb > 1 ? decrementItem(item.id) : removeItem(item.id);
                     }}
                     nb={item.nb}
                     onIncrement={() => {
