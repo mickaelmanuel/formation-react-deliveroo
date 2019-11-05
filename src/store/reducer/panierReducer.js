@@ -26,7 +26,6 @@ export const panierReducer = (state = initialState, action) => {
       });
 
     case ADD_ITEM:
-      console.log("add");
       let clone = { ...initProduit };
       clone.id = action.payload.id;
       clone.title = action.payload.title;

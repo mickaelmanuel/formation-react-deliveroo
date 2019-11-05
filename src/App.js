@@ -1,50 +1,56 @@
 import React from "react";
-import axios from "axios";
 import Header from "./components/Header";
+import axios from "axios";
 import { Menu } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
 import { Cart } from "./components/Cart";
-import { selectPanier } from "./selectors";
+import { selectPanier, selectData } from "./selectors";
 import { connect } from "react-redux";
 import { incrementItem, addItem } from "./action";
 
-const mapStateToProps = state => ({
-  panier: selectPanier(state)
-});
+// SET_POSTS action creator
+const setData = data => ({ type: "SET_DATA", payload: data });
 
-const mapDispatchToProps = {
-  addItem,
-  incrementItem
+const fetchMyData = dispatch => {
+  axios.get("https://deliveroo-api.now.sh/menu").then(response => {
+    dispatch(setData(response.data));
+  });
 };
 
-class AppRender extends React.Component {
-  state = {
-    data: null
-  };
+const mapStateToProps = state => ({
+  panier: selectPanier(state),
+  data: selectData(state)
+});
 
+const mapDispatchToProps = dispatch => ({
+  addItem: item => {
+    dispatch(addItem(item));
+  },
+  incrementItem: item => {
+    dispatch(incrementItem(item));
+  },
+  fetchMyData: () => dispatch(fetchMyData)
+});
+
+class AppRender extends React.Component {
   async componentDidMount() {
-    try {
-      const response = await axios.get("https://deliveroo-api.now.sh/menu");
-      this.setState({ data: response.data });
-    } catch (error) {
-      console.error(error);
-    }
+    await this.props.fetchMyData();
   }
 
   render() {
     return (
       <div>
-        <Header restaurant={this.state.data && this.state.data.restaurant} />
+        <Header restaurant={this.props.data && this.props.data.restaurant} />
         <div className="Content">
           <div className="Content--center">
             <div className="Menu">
-              {this.state.data &&
-                this.state.data.menu &&
-                Object.keys(this.state.data.menu).map((menuName, index) => {
+              {this.props.data &&
+                this.props.data.menu &&
+                Object.keys(this.props.data.menu).map((menuName, index) => {
                   return (
-                    this.state.data.menu[menuName].length > 0 && (
+                    this.props.data.menu[menuName].length > 0 && (
                       <Menu title={menuName} key={index}>
-                        {this.state.data.menu[menuName].map(item => {
+                        {this.props.data.menu[menuName].map(item => {
                           return (
                             <MenuItem
                               key={item.id}
@@ -59,6 +65,7 @@ class AppRender extends React.Component {
                                 if (index !== -1) {
                                   this.props.incrementItem(item.id);
                                 } else {
+                                  console.log("additem");
                                   this.props.addItem({ id: item.id, title: item.title, price: item.price });
                                 }
                               }}
