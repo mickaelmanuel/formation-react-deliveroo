@@ -1,43 +1,39 @@
 import React from "react";
 import Header from "./components/Header";
-import axios from "axios";
 import { Menu } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
 import { Cart } from "./components/Cart";
 import { selectPanier, selectData } from "./selectors";
 import { connect } from "react-redux";
-import { incrementItem, addItem } from "./action";
-
-// SET_POSTS action creator
-const setData = data => ({ type: "SET_DATA", payload: data });
-
-const fetchMyData = dispatch => {
-  axios.get("https://deliveroo-api.now.sh/menu").then(response => {
-    dispatch(setData(response.data));
-  });
-};
+import { incrementItem, addItem, fetchMyData } from "./action";
 
 const mapStateToProps = state => ({
   panier: selectPanier(state),
-  data: selectData(state)
+  data: selectData(state),
+  dataHasError: state.dataHasError,
+  dataIsLoading: state.dataIsLoading
 });
 
-const mapDispatchToProps = dispatch => ({
-  addItem: item => {
-    dispatch(addItem(item));
-  },
-  incrementItem: item => {
-    dispatch(incrementItem(item));
-  },
-  fetchMyData: () => dispatch(fetchMyData)
-});
+const mapDispatchToProps = {
+  addItem,
+  incrementItem,
+  fetchMyData
+};
 
 class AppRender extends React.Component {
-  async componentDidMount() {
-    await this.props.fetchMyData();
+  componentDidMount() {
+    this.props.fetchMyData();
   }
 
   render() {
+    if (this.props.dataHasError) {
+      return <p>Ouuups! Une erreur est arrivée lors du chargement des données</p>;
+    }
+
+    // if (this.props.dataIsLoading) {
+    //   return <p>Loading…</p>;
+    // }
+
     return (
       <div>
         <Header restaurant={this.props.data && this.props.data.restaurant} />
@@ -65,7 +61,6 @@ class AppRender extends React.Component {
                                 if (index !== -1) {
                                   this.props.incrementItem(item.id);
                                 } else {
-                                  console.log("additem");
                                   this.props.addItem({ id: item.id, title: item.title, price: item.price });
                                 }
                               }}
