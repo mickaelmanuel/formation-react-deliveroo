@@ -1,10 +1,11 @@
 import * as React from "react";
 import CartLine from "./CartLine";
-import { incrementItem, decrementItem, removeItem } from "../action";
 import { formatToEuroCurrency } from "../Utils";
 import { selectPanier } from "./../selectors";
 import { connect } from "react-redux";
 import { IPanier } from "../Interfaces";
+import { incrementItem, decrementItem, removeItem } from "../store/reducer/panier/actions";
+import { PanierState } from "../store/reducer/panier/types";
 
 const mapStateToProps = (state: any) => ({
   panier: selectPanier(state)
@@ -19,15 +20,15 @@ const mapDispatchToProps = {
 const FRAIS_LIVRAISON: number = 2.5;
 
 export interface Props {
-  panier: Array<IPanier>;
+  panier: PanierState;
   incrementItem: (id: string) => void;
   decrementItem: (id: string) => void;
   removeItem: (id: string) => void;
 }
 
 const CartRender: React.FC<Props> = ({ panier, incrementItem, decrementItem, removeItem }) => {
-  const panierVide = panier == null || panier.length === 0;
-  const subtotal = panier.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
+  const panierVide = panier != null && panier.elements.length === 0;
+  const subtotal = panier.elements.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
   const total = subtotal + FRAIS_LIVRAISON;
   return (
     <div className="Cart--card">
@@ -41,12 +42,12 @@ const CartRender: React.FC<Props> = ({ panier, incrementItem, decrementItem, rem
         return (
           <div>
             <div className="Cart--items">
-              {panier.map((item, index: number) => {
+              {panier.elements.map((item, index: number) => {
                 return (
                   <CartLine
                     key={index}
                     onDecrement={() => {
-                      let result = panier.find(x => x.id === item.id);
+                      let result = panier.elements.find(x => x.id === item.id);
                       result && result.nb > 1 ? decrementItem(item.id) : removeItem(item.id);
                     }}
                     nb={item.nb}

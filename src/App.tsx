@@ -4,11 +4,14 @@ import { Menu as MenuComponent } from "./components/Menu";
 import { MenuItem } from "./components/MenuItem";
 import { Cart } from "./components/Cart";
 import { selectPanier, selectData } from "./selectors";
-import { incrementItem, addItem, fetchMyData } from "./action";
+import { fetchMyData } from "./action";
+import { addItem, incrementItem } from "./store/reducer/panier/actions";
 import { connect } from "react-redux";
-import { IPanierLight, IPanier, IMenu } from "./Interfaces";
+import { IPanier, IMenu, IPanierLight } from "./Interfaces";
+import { AppState } from "./store";
+import { PanierState } from "./store/reducer/panier/types";
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
   panier: selectPanier(state),
   data: selectData(state),
   dataHasError: state.dataHasError,
@@ -22,7 +25,7 @@ const mapDispatchToProps = {
 };
 
 export interface AppProps {
-  panier: Array<IPanier>;
+  panier: PanierState;
   data: any;
   dataHasError: boolean;
   dataIsLoading: boolean;
@@ -67,7 +70,7 @@ class AppRender extends React.Component<AppProps> {
                               popular={item.popular}
                               picture={item.picture}
                               onClick={() => {
-                                let index = this.props.panier.findIndex(x => x.id === item.id);
+                                let index = this.props.panier.elements.findIndex(x => x.id === item.id);
 
                                 if (index !== -1) {
                                   this.props.incrementItem(item.id);

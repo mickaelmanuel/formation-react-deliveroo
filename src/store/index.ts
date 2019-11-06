@@ -5,6 +5,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 const middlewares = [thunk];
 
+export type AppState = ReturnType<typeof reducer>;
+
 export const store = createStore(
   reducer,
   compose(

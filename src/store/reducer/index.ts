@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { dataReducer, dataErrorReducer, dataIsLoadingReducer } from "./dataReducer";
-import { panierReducer } from "./panierReducer";
+import { panierReducer } from "./panier/reducers";
+
 export const reducer = combineReducers({
   data: dataReducer,
   dataHasError: dataErrorReducer,
