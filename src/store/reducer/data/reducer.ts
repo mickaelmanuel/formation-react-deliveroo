@@ -3,7 +3,8 @@ import { produce } from "immer";
 
 const initialState: DataState = {
   isLoading: false,
-  hasError: false
+  hasError: false,
+  root: null
 };
 
 export const dataReducer = (state = initialState, action: IDataActionTypes) => {

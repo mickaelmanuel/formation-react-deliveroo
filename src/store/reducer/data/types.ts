@@ -7,7 +7,7 @@ export const FETCH_DATA_ERROR = "FETCH_DATA_ERROR";
 export interface DataState {
   isLoading: boolean;
   hasError: boolean;
-  root?: RootObject;
+  root: RootObject | any;
 }
 
 interface IActionDataReducer {

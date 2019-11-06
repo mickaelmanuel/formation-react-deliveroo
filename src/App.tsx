@@ -42,13 +42,9 @@ class AppRender extends React.Component<AppProps> {
       return <p>Ouuups! Une erreur est arrivée lors du chargement des données</p>;
     }
 
-    if (this.props.data.isLoading) {
-      return <p>Loading…</p>;
-    }
-
-    if (isNull(this.props.data.root)) {
-      return <p>root is null</p>;
-    }
+    // if (this.props.data.isLoading) {
+    //   return <p>Loading…</p>;
+    // }
 
     return (
       <div>
