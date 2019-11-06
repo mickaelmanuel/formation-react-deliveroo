@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import { dataReducer, dataErrorReducer, dataIsLoadingReducer } from "./dataReducer";
 import { panierReducer } from "./panier/reducers";
+import { dataReducer } from "./data/reducer";
 
 export const reducer = combineReducers({
   data: dataReducer,
-  dataHasError: dataErrorReducer,
-  dataIsLoading: dataIsLoadingReducer,
+  // dataHasError: dataErrorReducer,
+  // dataIsLoading: dataIsLoadingReducer,
   panier: panierReducer
 });

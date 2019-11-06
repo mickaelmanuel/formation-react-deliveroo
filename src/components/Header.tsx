@@ -3,11 +3,11 @@ import { isNull } from "util";
 import { IconDeliveroo } from "./Icon";
 import { IRestaurant } from "../Interfaces";
 
-export interface Props {
-  restaurant: IRestaurant;
-}
+type Props = {
+  restaurant?: IRestaurant;
+};
 
-const Header: React.FC<Props> = ({ restaurant }) => {
+const Header = ({ restaurant }: Props) => {
   return (
     <header className="Header">
       <div className="TopBar">
@@ -32,8 +32,8 @@ const Header: React.FC<Props> = ({ restaurant }) => {
           return (
             <div className="RestaurantInfos--center">
               <div className="RestaurantInfos--texts">
-                <h1>{restaurant.name}</h1>
-                <p>{restaurant.description} </p>
+                <h1>{restaurant && restaurant.name}</h1>
+                <p>{restaurant && restaurant.description} </p>
               </div>
               <img className="RestaurantInfos--cover" src={restaurant && restaurant.picture} alt="restaurant cover" />
             </div>

@@ -2,16 +2,16 @@ import React from "react";
 import Populaire from "./Populaire";
 import { formatToEuroCurrency } from "../Utils";
 
-export interface Props {
+type Props = {
   title: string;
   description: string;
   price: number;
   popular?: boolean;
   picture?: string;
   onClick: () => void;
-}
+};
 
-export const MenuItem: React.FC<Props> = ({ title, description, price, popular, picture, onClick }) => (
+export const MenuItem = ({ title, description, price, popular, picture, onClick }: Props) => (
   <div className="MenuItem" onClick={onClick}>
     <div className="MenuItem--card">
       <div className="MenuItem--texts">

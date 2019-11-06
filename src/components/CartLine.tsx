@@ -2,15 +2,15 @@ import * as React from "react";
 import { IconMoins, IconPlus } from "./Icon";
 import { formatToEuroCurrency } from "../Utils";
 
-export interface Props {
+type Props = {
   nb: number;
   title: string;
   price: number;
   onIncrement: () => void;
   onDecrement: () => void;
-}
+};
 
-const CartLine: React.FC<Props> = ({ onDecrement, nb, onIncrement, title, price }) => {
+const CartLine = ({ onDecrement, nb, onIncrement, title, price }: Props) => {
   return (
     <div className="Cart--line">
       <div className="Cart--counter">

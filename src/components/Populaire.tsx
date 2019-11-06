@@ -1,7 +1,7 @@
 import React from "react";
 import { IconPopulaire } from "./Icon";
 
-const Populaire: React.FC = () => (
+const Populaire = () => (
   <span className="MenuItem--popular">
     <IconPopulaire />
     Populaire

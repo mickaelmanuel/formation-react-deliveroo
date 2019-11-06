@@ -7,15 +7,15 @@ import { selectPanier, selectData } from "./selectors";
 import { fetchMyData } from "./action";
 import { addItem, incrementItem } from "./store/reducer/panier/actions";
 import { connect } from "react-redux";
-import { IPanier, IMenu, IPanierLight } from "./Interfaces";
+import { IMenu, IPanierLight } from "./Interfaces";
 import { AppState } from "./store";
 import { PanierState } from "./store/reducer/panier/types";
+import { DataState } from "./store/reducer/data/types";
+import { isNull } from "./Utils";
 
 const mapStateToProps = (state: AppState) => ({
   panier: selectPanier(state),
-  data: selectData(state),
-  dataHasError: state.dataHasError,
-  dataIsLoading: state.dataIsLoading
+  data: selectData(state)
 });
 
 const mapDispatchToProps = {
@@ -24,15 +24,13 @@ const mapDispatchToProps = {
   fetchMyData
 };
 
-export interface AppProps {
+type AppProps = {
   panier: PanierState;
-  data: any;
-  dataHasError: boolean;
-  dataIsLoading: boolean;
+  data: DataState;
   addItem: (item: IPanierLight) => void;
   incrementItem: (id: string) => void;
   fetchMyData: () => void;
-}
+};
 
 class AppRender extends React.Component<AppProps> {
   componentDidMount() {
@@ -40,27 +38,32 @@ class AppRender extends React.Component<AppProps> {
   }
 
   render() {
-    if (this.props.dataHasError) {
+    if (this.props.data.hasError) {
       return <p>Ouuups! Une erreur est arrivée lors du chargement des données</p>;
     }
 
-    // if (this.props.dataIsLoading) {
-    //   return <p>Loading…</p>;
-    // }
+    if (this.props.data.isLoading) {
+      return <p>Loading…</p>;
+    }
+
+    if (isNull(this.props.data.root)) {
+      return <p>root is null</p>;
+    }
 
     return (
       <div>
-        <Header restaurant={this.props.data && this.props.data.restaurant} />
+        <Header restaurant={this.props.data.root && this.props.data.root.restaurant} />
         <div className="Content">
           <div className="Content--center">
             <div className="Menu">
-              {this.props.data &&
-                this.props.data.menu &&
-                Object.keys(this.props.data.menu).map((menuName, index) => {
+              {this.props.data.root &&
+                this.props.data.root.menu &&
+                Object.keys(this.props.data.root.menu).map((menuName, index) => {
                   return (
-                    this.props.data.menu[menuName].length > 0 && (
+                    this.props.data.root &&
+                    this.props.data.root.menu[menuName].length > 0 && (
                       <MenuComponent title={menuName} key={index}>
-                        {this.props.data.menu[menuName].map((item: IMenu) => {
+                        {this.props.data.root.menu[menuName].map((item: IMenu) => {
                           return (
                             <MenuItem
                               key={item.id}

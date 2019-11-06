@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { IPanier } from "../Interfaces";
 import { incrementItem, decrementItem, removeItem } from "../store/reducer/panier/actions";
 import { PanierState } from "../store/reducer/panier/types";
+import { AppState } from "../store";
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
   panier: selectPanier(state)
 });
 
@@ -19,14 +20,14 @@ const mapDispatchToProps = {
 
 const FRAIS_LIVRAISON: number = 2.5;
 
-export interface Props {
+type Props = {
   panier: PanierState;
   incrementItem: (id: string) => void;
   decrementItem: (id: string) => void;
   removeItem: (id: string) => void;
-}
+};
 
-const CartRender: React.FC<Props> = ({ panier, incrementItem, decrementItem, removeItem }) => {
+const CartRender = ({ panier, incrementItem, decrementItem, removeItem }: Props) => {
   const panierVide = panier != null && panier.elements.length === 0;
   const subtotal = panier.elements.reduce((acc, currentValue) => acc + currentValue.price * currentValue.nb, 0);
   const total = subtotal + FRAIS_LIVRAISON;
