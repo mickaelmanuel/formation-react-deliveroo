@@ -1,10 +1,10 @@
 import React from "react";
 import { isNull } from "util";
 import { IconDeliveroo } from "./Icon";
-import { Restaurant } from "../Interfaces";
+import { IRestaurant } from "../Interfaces";
 
 export interface Props {
-  restaurant: Restaurant;
+  restaurant: IRestaurant;
 }
 
 const Header: React.FC<Props> = ({ restaurant }) => {

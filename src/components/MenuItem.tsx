@@ -7,7 +7,7 @@ export interface Props {
   description: string;
   price: number;
   popular?: boolean;
-  picture: string;
+  picture?: string;
   onClick: () => void;
 }
 

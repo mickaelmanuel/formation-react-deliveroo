@@ -4,7 +4,7 @@ import { incrementItem, decrementItem, removeItem } from "../action";
 import { formatToEuroCurrency } from "../Utils";
 import { selectPanier } from "./../selectors";
 import { connect } from "react-redux";
-import { Panier } from "../Interfaces";
+import { IPanier } from "../Interfaces";
 
 const mapStateToProps = (state: any) => ({
   panier: selectPanier(state)
@@ -19,7 +19,7 @@ const mapDispatchToProps = {
 const FRAIS_LIVRAISON: number = 2.5;
 
 export interface Props {
-  panier: Array<Panier>;
+  panier: Array<IPanier>;
   incrementItem: (id: string) => void;
   decrementItem: (id: string) => void;
   removeItem: (id: string) => void;

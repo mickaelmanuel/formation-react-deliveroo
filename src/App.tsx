@@ -6,7 +6,7 @@ import { Cart } from "./components/Cart";
 import { selectPanier, selectData } from "./selectors";
 import { incrementItem, addItem, fetchMyData } from "./action";
 import { connect } from "react-redux";
-import { PanierLight, Panier, Menu } from "./Interfaces";
+import { IPanierLight, IPanier, IMenu } from "./Interfaces";
 
 const mapStateToProps = (state: any) => ({
   panier: selectPanier(state),
@@ -22,21 +22,14 @@ const mapDispatchToProps = {
 };
 
 export interface AppProps {
-  panier: Array<Panier>;
+  panier: Array<IPanier>;
   data: any;
   dataHasError: boolean;
   dataIsLoading: boolean;
-  addItem: (item: PanierLight) => void;
+  addItem: (item: IPanierLight) => void;
   incrementItem: (id: string) => void;
   fetchMyData: () => void;
 }
-
-// export interface Panier {
-//   id: string;
-//   title: string;
-//   nb?: number;
-//   price: number;
-// }
 
 class AppRender extends React.Component<AppProps> {
   componentDidMount() {
@@ -64,7 +57,7 @@ class AppRender extends React.Component<AppProps> {
                   return (
                     this.props.data.menu[menuName].length > 0 && (
                       <MenuComponent title={menuName} key={index}>
-                        {this.props.data.menu[menuName].map((item: Menu) => {
+                        {this.props.data.menu[menuName].map((item: IMenu) => {
                           return (
                             <MenuItem
                               key={item.id}
@@ -79,7 +72,7 @@ class AppRender extends React.Component<AppProps> {
                                 if (index !== -1) {
                                   this.props.incrementItem(item.id);
                                 } else {
-                                  let x: PanierLight = {
+                                  let x: IPanierLight = {
                                     id: item.id,
                                     title: item.title,
                                     price: parseFloat(item.price)
